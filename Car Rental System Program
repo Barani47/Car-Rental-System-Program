@@ -1,0 +1,127 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Car {
+    private String licensePlate;
+    private String model;
+    private boolean isRented;
+
+    public Car(String licensePlate, String model) {
+        this.licensePlate = licensePlate;
+        this.model = model;
+        this.isRented = false;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public boolean isRented() {
+        return isRented;
+    }
+
+    public void rentCar() {
+        if (!isRented) {
+            isRented = true;
+            System.out.println("Car rented successfully.");
+        } else {
+            System.out.println("Car is already rented.");
+        }
+    }
+
+    public void returnCar() {
+        if (isRented) {
+            isRented = false;
+            System.out.println("Car returned successfully.");
+        } else {
+            System.out.println("Car was not rented.");
+        }
+    }
+
+    public void displayDetails() {
+        System.out.println("License Plate: " + licensePlate);
+        System.out.println("Model: " + model);
+        System.out.println("Status: " + (isRented ? "Rented" : "Available"));
+    }
+}
+
+public class CarRentalProgram {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Car> cars = new ArrayList<>(); // Dynamic list to store cars
+
+        while (true) {
+            System.out.println("\n--- Car Rental System ---");
+            System.out.println("1. Add a Car");
+            System.out.println("2. View Cars");
+            System.out.println("3. Rent a Car");
+            System.out.println("4. Return a Car");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    System.out.print("\nEnter license plate: ");
+                    String licensePlate = scanner.nextLine();
+                    System.out.print("Enter model: ");
+                    String model = scanner.nextLine();
+                    cars.add(new Car(licensePlate, model));
+                    System.out.println("Car added successfully!");
+                    break;
+                case 2:
+                    System.out.println("\nAvailable Cars:");
+                    if (cars.isEmpty()) {
+                        System.out.println("No cars available.");
+                    } else {
+                        for (Car car : cars) {
+                            car.displayDetails();
+                            System.out.println();
+                        }
+                    }
+                    break;
+                case 3:
+                    System.out.print("\nEnter the license plate of the car to rent: ");
+                    String rentPlate = scanner.nextLine();
+                    boolean found = false;
+                    for (Car car : cars) {
+                        if (car.getLicensePlate().equalsIgnoreCase(rentPlate)) {
+                            car.rentCar();
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Car with license plate " + rentPlate + " not found.");
+                    }
+                    break;
+                case 4:
+                    System.out.print("\nEnter the license plate of the car to return: ");
+                    String returnPlate = scanner.nextLine();
+                    found = false;
+                    for (Car car : cars) {
+                        if (car.getLicensePlate().equalsIgnoreCase(returnPlate)) {
+                            car.returnCar();
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Car with license plate " + returnPlate + " not found.");
+                    }
+                    break;
+                case 5:
+                    System.out.println("Exiting the system. Thank you!");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
